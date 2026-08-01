@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <meta name="theme-color" content="#020617" />
+
+  <title>Traffic Light Tracker</title>
+
+  <link rel="stylesheet" href="./styles.css" />
+
+  <!--
+    Use the standard WASM build first because it has wider browser support.
+    Both scripts use defer and run in the order shown.
+  -->
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.27.0/dist/ort.min.js"
+  ></script>
+  <script defer src="./app.js"></script>
+</head>
+
+<body>
+  <main class="page">
+    <header class="header">
+      <div>
+        <p class="eyebrow">STATIC BROWSER PROTOTYPE</p>
+        <h1>Traffic Light Tracker</h1>
+      </div>
+
+      <span id="secureBadge" class="badge">Checking connection</span>
+    </header>
+
+    <section class="camera-card">
+      <div id="stage" class="stage">
+        <video
+          id="camera"
+          autoplay
+          muted
+          playsinline
+        ></video>
+
+        <canvas id="overlay"></canvas>
+
+        <div id="emptyState" class="empty-state">
+          <strong>Camera is off</strong>
+          <span>Load the model, then open the camera.</span>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button id="startButton" class="primary" type="button">
+          Start camera
+        </button>
+
+        <button id="stopButton" class="secondary" type="button" disabled>
+          Stop
+        </button>
+      </div>
+    </section>
+
+    <section class="metrics" aria-label="Tracker status">
+      <article>
+        <span>Status</span>
+        <strong id="status">Waiting to start</strong>
+      </article>
+
+      <article>
+        <span>Runtime</span>
+        <strong id="runtime">Not loaded</strong>
+      </article>
+
+      <article>
+        <span>Inference</span>
+        <strong id="latency">—</strong>
+      </article>
+
+      <article>
+        <span>Tracked lights</span>
+        <strong id="count">0</strong>
+      </article>
+    </section>
+
+    <section class="notes">
+      <h2>Version 1 scope</h2>
+      <p>
+        This version detects the COCO <code>traffic light</code> class and
+        assigns short-lived tracking IDs. It does not yet determine whether a
+        light belongs to your lane or issue a driving warning.
+      </p>
+    </section>
+
+    <p class="safety">
+      Development prototype only. Do not operate the phone while driving.
+    </p>
+  </main>
+
+  <!-- Hidden 640 × 640 preprocessing canvas -->
+  <canvas
+    id="inputCanvas"
+    width="640"
+    height="640"
+    hidden
+  ></canvas>
+</body>
+</html>

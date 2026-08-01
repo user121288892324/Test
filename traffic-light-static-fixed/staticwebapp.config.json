@@ -1,0 +1,14 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html"
+  },
+  "globalHeaders": {
+    "Permissions-Policy": "camera=(self)",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "Cache-Control": "no-cache"
+  },
+  "mimeTypes": {
+    ".onnx": "application/octet-stream"
+  }
+}
