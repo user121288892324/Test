@@ -1,29 +1,21 @@
-# Fixed Traffic Light Tracker
+# Traffic Light Tracker — tiled inference update
 
-## Generate the model
+This version requests a high-resolution rear-camera stream and scans overlapping
+crops from the upper part of the frame. It is a drop-in replacement for the
+previous static browser project.
 
-From the VS Code PowerShell terminal:
+## Copy the model
 
-```powershell
-cd "C:\Users\yujun\Desktop\traffic-light-static-fixed"
-
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-
-python -m pip install --upgrade pip
-python -m pip install -r .\tools\requirements.txt
-python .\tools\export_model.py
-```
-
-Confirm this file exists:
+Copy your existing model into:
 
 ```text
-models\traffic-light.onnx
+models/traffic-light.onnx
 ```
 
-## Start the static site
+## Test in VS Code
 
 ```powershell
+cd "C:\Users\yujun\Desktop\traffic-light-static-tiled"
 py -m http.server 8000
 ```
 
@@ -33,15 +25,39 @@ Open:
 http://localhost:8000
 ```
 
-Then press `Ctrl+F5` and click **Start camera**.
+Press `Ctrl+F5` after replacing an older version.
 
-## Troubleshooting
+## Azure Static Web Apps
 
-Open Chrome DevTools:
+Deploy these files from the repository root:
 
 ```text
-F12 → Console
-F12 → Network
+index.html
+app.js
+styles.css
+staticwebapp.config.json
+models/traffic-light.onnx
 ```
 
-The page now shows visible errors if ONNX Runtime, the model, or the camera fails.
+Use:
+
+```yaml
+app_location: "/"
+api_location: ""
+output_location: ""
+skip_app_build: true
+```
+
+## Scan modes
+
+- **Upper frame · 2 tiles:** faster; good initial phone setting.
+- **Upper frame · 3 tiles:** better small-object coverage; slower.
+- **Full frame · faster:** behavior closest to the previous version.
+
+Turn on **Show scan tiles** to verify what area is being processed.
+
+## Notes
+
+Tiling improves the number of pixels available to the generic COCO detector,
+but it does not replace a traffic-light-specific model. The next major accuracy
+improvement will come from training a dedicated model on distant traffic signals.
