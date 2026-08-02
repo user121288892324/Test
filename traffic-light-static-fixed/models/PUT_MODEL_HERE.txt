@@ -1,0 +1,2 @@
+Run: python .\tools\export_model.py
+Expected output: models\traffic-light.onnx
